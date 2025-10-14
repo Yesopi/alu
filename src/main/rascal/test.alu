@@ -1,0 +1,3 @@
+mydato = data with campo1, campo2
+mystruct = struct sequence(campo1, campo2)
+end mydato
