@@ -1,3 +1,9 @@
-mydato = data with campo1, campo2
-mystruct = struct sequence(campo1, campo2)
-end mydato
+negativo = data with numero
+negstruct = struct sequence(numero)
+negar = function (x) do
+    (-)((x))
+end negar
+doble = function (y) do
+    (y) * (2)
+end doble
+end negativo
