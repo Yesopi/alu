@@ -90,7 +90,7 @@ syntax Condblock
 ;
 
 syntax Option 
-    = caseClause: Conditional test "-" "\>" Result value
+    = caseClause: Conditional tests "-" "\>" Result values
 ;
 
 syntax Conditional =
