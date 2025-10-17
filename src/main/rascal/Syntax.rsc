@@ -59,16 +59,16 @@ syntax Expression
 
 syntax Arithmetic 
     = baseValue: Term operand
-    | sumOp: Arithmetic operandLeft "+" Term operandRight
-    | diffOp: Arithmetic operandLeft "-" Term operandRight
+    | sumOp: Arithmetic sum_operandLeft "+" Term sum_operandRight
+    | diffOp: Arithmetic diff_operandLeft "-" Term diff_operandRight
 ;
 
 syntax Term 
     = factorValue: Fact element
-    | prodOp: Term operandLeft "*" Fact operandRight
-    | quotOp: Term operandLeft "/" Fact operandRight
-    | powerOp: Term operandLeft "**" Fact operandRight
-    | modOp: Term operandLeft "%" Fact operandRight
+    | prodOp: Term prod_operandLeft "*" Fact prod_operandRight
+    | quotOp: Term quot_operandLeft "/" Fact quot_operandRight
+    | powerOp: Term power_operandLeft "**" Fact power_operandRight
+    | modOp: Term mod_operandLeft "%" Fact mod_operandRight
 ;
 
 syntax Fact 
@@ -94,12 +94,12 @@ syntax Option
 ;
 
 syntax Conditional =
-    ltComp:      Arithmetic operandLeft '\<'  Arithmetic operandRight
-    | gtComp:      Arithmetic operandLeft '\>'  Arithmetic operandRight
-    | leqComp:     Arithmetic operandLeft '\<=' Arithmetic operandRight
-    | geqComp:     Arithmetic operandLeft '\>=' Arithmetic operandRight
-    | eqComp:      Arithmetic operandLeft '='  Arithmetic operandRight
-    | neqComp:     Arithmetic operandLeft '\<\>' Arithmetic operandRight
+    ltComp:      Arithmetic lt_operandLeft '\<'  Arithmetic lt_operandRight
+    | gtComp:      Arithmetic gt_operandLeft '\>'  Arithmetic gt_operandRight
+    | leqComp:     Arithmetic leq_operandLeft '\<=' Arithmetic leq_operandRight
+    | geqComp:     Arithmetic geq_operandLeft '\>=' Arithmetic geq_operandRight
+    | eqComp:      Arithmetic eq_operandLeft '='  Arithmetic eq_operandRight
+    | neqComp:     Arithmetic neq_operandLeft '\<\>' Arithmetic neq_operandRight
     | boolTrue:    "true"
     | boolFalse:   "false"
     | varTest:     Identifier variable

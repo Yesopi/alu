@@ -21,15 +21,15 @@ data Tuple = pairDeclaration("(", Identifier elem1, ",", Identifier elem2, ")");
 
 data Function = funcDeclaration(Identifier funcId, "=", "function", Fparameterset signature, "do", Fexpressionset bodyExprs, "end", Identifier endTag);
 
-data Fparameterset = emptySignature("()") | filledSignature("(" ,list[Identifier] paramNames ,")");
+data Fparameterset = emptySignature("(",")") | filledSignature("(" ,list[Identifier] paramNames ,")");
 
 data Fexpressionset = bodySequence(list[Expression] statements);
 
 data Expression = mathExpr(Arithmetic computation) | flowExpr(Flow controlFlow) | pathExpr(Access navigation);
 
-data Arithmetic = baseValue(Term operand) | sumOp(Arithmetic operandLeft, "+", Term operandRight) | diffOp(Arithmetic operandLeft, "-", Term operandRight);
+data Arithmetic = baseValue(Term operand) | sumOp(Arithmetic sum_operandLeft, "+", Term sum_operandRight) | diffOp(Arithmetic diff_operandLeft, "-", Term diff_operandRight);
 
-data Term = factorValue(Fact element) | prodOp(Term operandLeft, "*", Fact operandRight) | quotOp(Term operandLeft, "/", Fact operandRight) | powerOp(Term operandLeft, "**", Fact operandRight) | modOp(Term operandLeft, "%", Fact operandRight);
+data Term = factorValue(Fact element) | prodOp(Term prod_operandLeft, "*", Fact prod_operandRight) | quotOp(Term quot_operandLeft, "/", Fact quot_operandRight) | powerOp(Term power_operandLeft, "**", Fact power_operandRight) | modOp(Term mod_operandLeft, "%", Fact mod_operandRight);
 
 data Fact = wrappedArith(list["(-)"] signs, "(", Arithmetic expression, ")") | wrappedDigit(list["(-)"] signs, "(", list[Digit] number, ")") | wrappedDecimal(list["(-)"] signs, "(", Decimal floatNum, ")") | wrappedId(list["(-)"] signs, "(", Identifier symbol, ")") | wrappedAccess(list["(-)"] signs, "(", Access path, ")");
 
@@ -39,7 +39,7 @@ data Condblock = multiCase( "cond", Identifier condId, "do", list[Option] cases,
 
 data Option = caseClause(Conditional tests, "-" , "\>", Result values);
 
-data Conditional = ltComp(Arithmetic operandLeft, "\<", Arithmetic operandRight) | gtComp(Arithmetic operandLeft, "\>", Arithmetic operandRight) | leqComp(Arithmetic operandLeft, "\<=", Arithmetic operandRight) | geqComp(Arithmetic operandLeft, "\>=", Arithmetic operandRight) | eqComp(Arithmetic operandLeft, "=", Arithmetic operandRight) | neqComp(Arithmetic operandLeft, "\<\>", Arithmetic operandRight) | boolTrue("true") | boolFalse("false") | varTest(Identifier variable);
+data Conditional = ltComp(Arithmetic lt_operandLeft, "\<", Arithmetic lt_operandRight) | gtComp(Arithmetic gt_operandLeft, "\>", Arithmetic gt_operandRight) | leqComp(Arithmetic leq_operandLeft, "\<=", Arithmetic leq_operandRight) | geqComp(Arithmetic geq_operandLeft, "\>=", Arithmetic geq_operandRight) | eqComp(Arithmetic eq_operandLeft, "=", Arithmetic eq_operandRight) | neqComp(Arithmetic neq_operandLeft, "\<\>", Arithmetic neq_operandRight) | boolTrue("true") | boolFalse("false") | varTest(Identifier variable);
 
 data Result = computedValue(Expression evaluation);
 
@@ -55,6 +55,6 @@ data Dollarparameterset = mappingArgs("(", list[tuple[Identifier, Expression]] k
 
 data Dotaccess = propertyAccess(Identifier entity, ".", Identifier property);
 
-data Builtinaccess = zeroAryCall(Identifier funcName, "()") | nAryCall(Identifier funcName, "(", list[ArgumentItem] params, ")");
+data Builtinaccess = zeroAryCall(Identifier funcName, "(",")") | nAryCall(Identifier funcName, "(", list[ArgumentItem] params, ")");
 
 data ArgumentItem = simpleArg(Identifier name) | complexArg(Expression values);
