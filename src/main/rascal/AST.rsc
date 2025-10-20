@@ -55,6 +55,6 @@ data Dollarparameterset = mappingArgs("(", list[tuple[Identifier, Expression]] k
 
 data Dotaccess = propertyAccess(Identifier entity, ".", Identifier property);
 
-data Builtinaccess = zeroAryCall(Identifier funcName, "(",")") | nAryCall(Identifier funcName, "(", list[ArgumentItem] params, ")");
+data Builtinaccess = zeroAryCall(Identifier zero_funcName, "(",")") | nAryCall(Identifier nAry_funcName, "(", list[ArgumentItem] params, ")");
 
 data ArgumentItem = simpleArg(Identifier name) | complexArg(Expression values);

@@ -137,8 +137,8 @@ syntax Dotaccess
 ;
 
 syntax Builtinaccess 
-    = zeroAryCall: Identifier funcName "()"
-    | nAryCall: Identifier funcName "(" {ArgumentItem ","}+ params ")"
+    = zeroAryCall: Identifier zero_funcName "()"
+    | nAryCall: Identifier nAry_funcName "(" {ArgumentItem ","}+ params ")"
 ;
 
 syntax ArgumentItem
