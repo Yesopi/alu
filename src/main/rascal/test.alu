@@ -1,9 +1,11 @@
-negativo = data with numero
-negstruct = struct sequence(numero)
-negar = function (x) do
-    (-)((x))
-end negar
-doble = function (y) do
-    (y) * (2)
+invertir = function () do
+    (-)((15))
+end invertir
+
+doble = function () do
+    (8) * (2)
 end doble
-end negativo
+
+mitad = function () do
+    (20) / (2)
+end mitad
