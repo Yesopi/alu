@@ -1,9 +1,11 @@
 module Syntax
 
 layout Layout = WhitespaceAndComment* !>> [\t\n\r\ ];
-lexical WhitespaceAndComment = [\t\n\r\ ];
+lexical WhitespaceAndComment 
+    = [\t\n\r\ ]
+    | "//" ![\n]* [\n]
+    ;
 
-// Símbolo inicial del programa
 start syntax Program 
     = aluProgram: Module* components
 ;
@@ -59,24 +61,25 @@ syntax Expression
 
 syntax Arithmetic 
     = baseValue: Term operand
-    | sumOp: Arithmetic sum_operandLeft "+" Term sum_operandRight
-    | diffOp: Arithmetic diff_operandLeft "-" Term diff_operandRight
+    > left sumOp: Arithmetic left "+" Term right
+    | left diffOp: Arithmetic left "-" Term right
 ;
 
 syntax Term 
     = factorValue: Fact element
-    | prodOp: Term prod_operandLeft "*" Fact prod_operandRight
-    | quotOp: Term quot_operandLeft "/" Fact quot_operandRight
-    | powerOp: Term power_operandLeft "**" Fact power_operandRight
-    | modOp: Term mod_operandLeft "%" Fact mod_operandRight
+    > left prodOp: Term left "*" Fact right
+    | left quotOp: Term left "/" Fact right
+    | right powerOp: Term left "**" Fact right
+    | left modOp: Term left "%" Fact right
 ;
 
 syntax Fact 
-    = wrappedArith: "(-)"* signs "(" Arithmetic expression ")"
-    | wrappedDigit: "(-)"* signs "(" Digit+ number ")"
-    | wrappedDecimal: "(-)"* signs "(" Decimal floatNum ")"
-    | wrappedId: "(-)"* signs "(" Identifier symbol ")"
-    | wrappedAccess: "(-)"* signs "(" Access path ")"
+    = negative: "(-)" Fact inner
+    | wrappedArith: "(" Arithmetic expression ")"
+    | wrappedDigit: "(" Digit+ number ")"
+    | wrappedDecimal: "(" Decimal floatNum ")"
+    | wrappedId: "(" Identifier symbol ")"
+    | wrappedAccess: "(" Access path ")"
 ;
 
 syntax Flow 
@@ -86,31 +89,34 @@ syntax Flow
 ;
 
 syntax Condblock 
-    = multiCase: "cond" Identifier condId "do" Option* cases "end"
+    = multiCase: "cond" Identifier condId "do" CaseOption* cases "end"
 ;
 
-syntax Option 
-    = caseClause: Conditional tests "-" "\>" Result values
+
+syntax CaseOption 
+    = caseClause: Condition condition "-" "\>" CaseResult resultValue
 ;
 
-syntax Conditional =
-    ltComp:      Arithmetic lt_operandLeft '\<'  Arithmetic lt_operandRight
-    | gtComp:      Arithmetic gt_operandLeft '\>'  Arithmetic gt_operandRight
-    | leqComp:     Arithmetic leq_operandLeft '\<=' Arithmetic leq_operandRight
-    | geqComp:     Arithmetic geq_operandLeft '\>=' Arithmetic geq_operandRight
-    | eqComp:      Arithmetic eq_operandLeft '='  Arithmetic eq_operandRight
-    | neqComp:     Arithmetic neq_operandLeft '\<\>' Arithmetic neq_operandRight
-    | boolTrue:    "true"
-    | boolFalse:   "false"
-    | varTest:     Identifier variable
+
+syntax Condition 
+    = ltComp: Arithmetic left "\<" Arithmetic right
+    | gtComp: Arithmetic left "\>" Arithmetic right
+    | leqComp: Arithmetic left "\<=" Arithmetic right
+    | geqComp: Arithmetic left "\>=" Arithmetic right
+    | eqComp: Arithmetic left "=" Arithmetic right
+    | neqComp: Arithmetic left "\<\>" Arithmetic right
+    | boolTrue: "true"
+    | boolFalse: "false"
+    | varTest: Identifier variable
 ;
 
-syntax Result 
+
+syntax CaseResult 
     = computedValue: Expression evaluation
 ;
 
 syntax Ifblock 
-    = branchConstruct: "if" Conditional predicate "then" Expression whenTrue "else" Expression whenFalse "end"
+    = branchConstruct: "if" Condition predicate "then" Expression whenTrue "else" Expression whenFalse "end"
 ;
 
 syntax Forblock 
@@ -129,7 +135,11 @@ syntax Dollaraccess
 ;
 
 syntax Dollarparameterset 
-    = mappingArgs: "(" Identifier key1 ":" Expression val1 ("," Identifier keyN ":" Expression valN)* ")"
+    = mappingArgs: "(" {KeyValuePair ","}+ pairs ")"
+;
+
+syntax KeyValuePair 
+    = keyValue: Identifier key ":" Expression val
 ;
 
 syntax Dotaccess 
@@ -137,23 +147,21 @@ syntax Dotaccess
 ;
 
 syntax Builtinaccess 
-    = zeroAryCall: Identifier zero_funcName "()"
-    | nAryCall: Identifier nAry_funcName "(" {ArgumentItem ","}+ params ")"
+    = zeroAryCall: Identifier funcName "()"
+    | nAryCall: Identifier funcName "(" {ArgumentItem ","}+ params ")"
 ;
 
 syntax ArgumentItem
-    = simpleArg: Identifier name
-    | complexArg: Expression value
+    = simpleArg: Identifier argName
+    | complexArg: Expression expr
 ;
 
-// Tokens léxicos
-lexical Identifier = [a-z][a-z0-9]* !>> Reserved;
+lexical Identifier = ([a-z][a-z0-9\-]*) !>> [a-z0-9\-] \ Reserved;
 
 lexical Digit = [0-9];
 
 lexical Decimal = [0-9]+ "." [0-9]+;
 
-// Palabras reservadas
 keyword Reserved = 
     "cond" | "do" | "data" | "if" | "else" | "elseif" | "end" | "for" | 
     "from" | "then" | "function" | "in" | "iterator" | "sequence" | 

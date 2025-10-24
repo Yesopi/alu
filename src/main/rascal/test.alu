@@ -1,5 +1,5 @@
 negativo = data with numero
-negstruct = struct sequence(numero)
+rep = struct sequence(numero)
 negar = function (x) do
     (-)((x))
 end negar

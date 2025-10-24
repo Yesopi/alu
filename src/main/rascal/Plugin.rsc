@@ -2,11 +2,11 @@ module Plugin
 
 import IO;
 import ParseTree;
-import util::Reflective;
-import util::IDEServices;
-import util::LanguageServer;
 import Relation;
 import Syntax;
+import util::IDEServices;
+import util::LanguageServer;
+import util::Reflective;
 
 PathConfig pcfg = getProjectPathConfig(|project://alu|);
 
@@ -20,4 +20,5 @@ set[LanguageService] contribs() = {
 
 void main() {
     registerLanguage(aluLang);
+    println("ALU Language Plugin registered.");
 }
